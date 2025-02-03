@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>蛇年快乐 - Matrix Code Rain</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // 设置画布大小为窗口大小
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 中文字符
+        const message = "蛇年快乐";
+        const chinese = message.split('');
+        
+        // Matrix字符（包含一些中文数字和字符）
+        const matrix = "长胖十斤发际线高过年吃胖回家相亲催婚饺子变圆相亲对象春节七天胖三斤脱发警告肉肉无敌暴饮暴食亲戚查岗连续假期饺子上瘾红包收缩钱包干瘪年终没奖相亲失败单身贵族越胖越富猪事顺利".split("");
+
+        // 字符大小
+        const fontSize = 20;
+        
+        // 计算列数
+        const columns = canvas.width / fontSize;
+        
+        // 初始化每一列的Y坐标
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        // 绘制动画
+        function draw() {
+            // 设置半透明黑色背景，形成拖尾效果
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 设置文字颜色和字体
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            // 逐列绘制字符
+            for (let i = 0; i < drops.length; i++) {
+                // 随机选择字符
+                const text = Math.random() > 0.98 ? 
+                    chinese[Math.floor(Math.random() * chinese.length)] : 
+                    matrix[Math.floor(Math.random() * matrix.length)];
+
+                // 绘制字符
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // 如果达到底部或随机重置，将该列重置到顶部
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        // 动画循环
+        setInterval(draw, 33);
+
+        // 响应窗口大小变化
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
